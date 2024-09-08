@@ -9,7 +9,7 @@
 Apache 2.0 - Veja LICENSE para mais detalhes.
 
 
-Caso queira uma melhor visualização dos endpoints, importe os arquivos  ´Tarefa.yamal´e `ListaTarefa.yamal` nesse site
+Caso queira uma melhor visualização dos endpoints, importe os arquivos  `Tarefa.yamal` e `ListaTarefa.yamal` nesse site
 https://editor.swagger.io/
 
 
