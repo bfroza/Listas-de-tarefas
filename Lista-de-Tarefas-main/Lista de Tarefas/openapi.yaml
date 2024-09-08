@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: Todo List
+  description: API para gerenciar uma lista de tarefas
+  version: 1.0.0
+  contact:
+    email: 032758@aluno.uricer.edu.br
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /tasks/post:
+    post:
+      summary: Adiciona uma nova tarefa
+      operationId: addTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInput'
+      responses:
+        '201':
+          description: Tarefa adicionada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+  /tasks:
+    get:
+      summary: Lista todas as tarefas
+      operationId: listTasks
+      responses:
+        '200':
+          description: Lista de tarefas obtida com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '500':
+          description: Erro interno do servidor
+  /tasks/{id}:
+    get:
+      summary: Retorna uma tarefa específica por ID
+      operationId: getTaskById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID da tarefa a ser retornada
+      responses:
+        '200':
+          description: Tarefa obtida com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Tarefa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+    delete:
+      summary: Deleta uma tarefa
+      operationId: deleteTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID da tarefa a ser deletada
+      responses:
+        '200':
+          description: Tarefa deletada com sucesso
+        '404':
+          description: Tarefa não encontrada
+        '500':
+          description: Erro interno do servidor
+    put:
+      summary: Atualiza uma tarefa existente
+      operationId: updateTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID da tarefa a ser atualizada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdate'
+      responses:
+        '200':
+          description: Tarefa atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Tarefa não encontrada
+        '500':
+          description: Erro interno do servidor
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID da tarefa
+        descricao:
+          type: string
+          description: Descrição da tarefa
+        criacao:
+          type: string
+          format: date
+          description: Data de criação da tarefa
+        limite:
+          type: string
+          format: date
+          description: Data limite para a conclusão da tarefa
+        finalizada:
+          type: boolean
+          description: Indica se a tarefa está concluída
+      example:
+        id: 1
+        descricao: Completar relatório
+        criacao: "2024-05-12"
+        limite: "2024-05-30"
+        finalizada: false
+    TaskInput:
+      type: object
+      properties:
+        descricao:
+          type: string
+          description: Descrição da tarefa
+        criacao:
+          type: string
+          format: date
+          description: Data de criação da tarefa
+        limite:
+          type: string
+          format: date
+          description: Data limite para a conclusão da tarefa
+        finalizada:
+          type: boolean
+          description: Indica se a tarefa está concluída
+      required:
+        - descricao
+        - criacao
+        - limite
+        - finalizada
+      example:
+        descricao: testee
+        criacao: "2024-05-12"
+        limite: "2024-05-30"
+        finalizada: false
+    TaskUpdate:
+      type: object
+      properties:
+        descricao:
+          type: string
+          description: Descrição da tarefa
+        criacao:
+          type: string
+          format: date-time
+          description: Data de criação da tarefa
+        limite:
+          type: string
+          format: date
+          description: Data limite para a conclusão da tarefa
+        finalizada:
+          type: boolean
+          description: Indica se a tarefa está concluída
+      required:
+        - descricao
+        - criacao
+        - limite
+        - finalizada
+      example:
+        descricao: Fazer relatório diario
+        criacao: "2024-05-23T12:15:46.376Z"
+        limite: "2024-05-30"
+        finalizada: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro
